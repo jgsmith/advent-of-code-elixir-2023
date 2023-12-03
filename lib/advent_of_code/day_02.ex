@@ -10,15 +10,14 @@ defmodule AdventOfCode.Day02 do
   def part2(input) do
     input
     |> parse_games()
-    |> Enum.map(fn {id, sets} ->
-      colors =
-        Enum.reduce(sets, %{"red" => 0, "blue" => 0, "green" => 0}, fn set, colors ->
-          Enum.reduce(set, colors, fn {count, color}, colors ->
-            Map.update!(colors, color, &max(&1, count))
-          end)
+    |> Enum.map(fn {_, sets} ->
+      Enum.reduce(sets, %{"red" => 0, "blue" => 0, "green" => 0}, fn set, colors ->
+        Enum.reduce(set, colors, fn {count, color}, colors ->
+          Map.update!(colors, color, &max(&1, count))
         end)
-
-      colors["red"] * colors["green"] * colors["blue"]
+      end)
+      |> Map.values()
+      |> Enum.product()
     end)
     |> Enum.sum()
   end
