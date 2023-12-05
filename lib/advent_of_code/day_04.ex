@@ -3,7 +3,7 @@ defmodule AdventOfCode.Day04 do
     input
     |> parse_input()
     |> count_winners()
-    |> Enum.map(fn {card_id, size} ->
+    |> Enum.map(fn {_card_id, size} ->
       if size == 0, do: 0, else: 2 ** (size - 1)
     end)
     |> Enum.sum()
