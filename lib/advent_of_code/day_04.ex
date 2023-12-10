@@ -35,6 +35,7 @@ defmodule AdventOfCode.Day04 do
     end)
   end
 
+  @spec count_winners([{integer(), MapSet.t(), MapSet.t()}]) :: [{integer(), integer()}]
   defp count_winners(cards) do
     cards
     |> Enum.map(fn {card_id, winning_numbers, numbers_you_have} ->
@@ -42,6 +43,7 @@ defmodule AdventOfCode.Day04 do
     end)
   end
 
+  @spec parse_input(String.t()) :: [{integer(), MapSet.t(), MapSet.t()}]
   defp parse_input(input) do
     input
     |> String.split("\n", trim: true)
@@ -49,6 +51,7 @@ defmodule AdventOfCode.Day04 do
     |> Enum.map(&parse_line/1)
   end
 
+  @spec parse_line(String.t()) :: {integer(), MapSet.t(), MapSet.t()}
   defp parse_line("Card " <> line) do
     {card_id, ":" <> rest} = line |> String.trim() |> Integer.parse()
 

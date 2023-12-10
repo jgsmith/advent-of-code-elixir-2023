@@ -114,6 +114,7 @@ defmodule AdventOfCode.Day05 do
     |> List.flatten()
   end
 
+  @spec parse_input(String.t()) :: map()
   defp parse_input(input) do
     input
     |> String.split("\n", trim: true)
@@ -143,6 +144,7 @@ defmodule AdventOfCode.Day05 do
     |> Enum.sort()
   end
 
+  @spec parse_lines([String.t()], map()) :: map()
   defp parse_lines([], acc) do
     acc
     |> Enum.reverse()

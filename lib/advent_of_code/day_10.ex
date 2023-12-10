@@ -1,4 +1,11 @@
 defmodule AdventOfCode.Day10 do
+  # tuple of strings
+  @type pipe_map :: tuple()
+  # {row, col}
+  @type location :: {integer(), integer()}
+  # map of locations to steps
+  @type path :: %{location() => integer()}
+
   def part1(input) do
     map = parse_input(input)
     start = locate_animal(map)
@@ -29,6 +36,7 @@ defmodule AdventOfCode.Day10 do
     |> Enum.sum()
   end
 
+  @spec winding_number(pipe_map(), [location()], location()) :: integer()
   defp winding_number(map, loop, {row, col} = location) do
     if location in loop do
       # points on the loop aren't in the loop
@@ -58,12 +66,14 @@ defmodule AdventOfCode.Day10 do
     end
   end
 
+  @spec get_max_steps(path()) :: integer()
   defp get_max_steps(journey) do
     journey
     |> Map.values()
     |> Enum.max()
   end
 
+  @spec walk_pipes(pipe_map(), location() | [location()]) :: path()
   defp walk_pipes(map, locations, steps \\ 0, acc \\ %{})
 
   defp walk_pipes(_, [], _, acc), do: acc
@@ -87,6 +97,7 @@ defmodule AdventOfCode.Day10 do
     walk_pipes(map, [location], steps, acc)
   end
 
+  @spec locate_animal(pipe_map()) :: location()
   defp locate_animal(map) do
     {line, row} =
       map
@@ -97,6 +108,7 @@ defmodule AdventOfCode.Day10 do
     {row, String.split(line, "S") |> hd |> String.length()}
   end
 
+  @spec neighbors(pipe_map(), location()) :: [location()]
   defp neighbors(map, {row, col}) do
     map
     |> map_at({row, col})
@@ -132,6 +144,7 @@ defmodule AdventOfCode.Day10 do
     end
   end
 
+  @spec start_pipe(pipe_map(), location()) :: String.t()
   defp start_pipe(map, {row, col}) do
     up = {row - 1, col}
     down = {row + 1, col}
@@ -152,6 +165,7 @@ defmodule AdventOfCode.Day10 do
     end
   end
 
+  @spec map_put(pipe_map(), location(), String.t()) :: pipe_map()
   defp map_put(map, {row, col}, symbol) do
     line = elem(map, row)
 
@@ -165,6 +179,7 @@ defmodule AdventOfCode.Day10 do
     |> List.to_tuple()
   end
 
+  @spec map_at(pipe_map(), location()) :: String.t()
   defp map_at(map, {row, col}) when row >= 0 and row < tuple_size(map) do
     map
     |> elem(row)
@@ -173,6 +188,7 @@ defmodule AdventOfCode.Day10 do
 
   defp map_at(_, _), do: "."
 
+  @spec parse_input(String.t()) :: pipe_map()
   defp parse_input(input) do
     input
     |> String.split("\n", trim: true)

@@ -16,7 +16,7 @@ defmodule AdventOfCode.Day03 do
   end
 
   @spec pluck_number({integer(), integer(), integer(), integer()}) :: integer()
-  defp pluck_number({_, _, _, value}), do: value
+  defp pluck_number({_index, _start, _stop, value}), do: value
 
   @spec find_gears({map(), list()}) :: list()
   defp find_gears({symbols, numbers}) do
@@ -70,13 +70,11 @@ defmodule AdventOfCode.Day03 do
     ] ++ prior_line ++ next_line
   end
 
-  @doc """
-  Takes the input and returns a tuple of a map of symbols and a list of numbers.
+  # Takes the input and returns a tuple of a map of symbols and a list of numbers.
 
-  Each symbol maps a position to the symbol.
-  Each number is a tuple of the start and stop position and the value.
-  """
-  @spec parse_input(binary()) :: {map(), list()}
+  # Each symbol maps a position to the symbol.
+  # Each number is a tuple of the start and stop position and the value.
+  @spec parse_input(String.t()) :: {map(), list()}
   defp parse_input(input) do
     input
     |> String.trim()

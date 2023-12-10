@@ -38,6 +38,7 @@ defmodule AdventOfCode.Day06 do
     {lower_bound, upper_bound}
   end
 
+  @spec parse_input(String.t()) :: [{integer(), integer()}]
   defp parse_input(input) do
     ["Time:" <> times, "Distance:" <> distances] = String.split(input, "\n", trim: true)
 

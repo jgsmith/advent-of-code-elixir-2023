@@ -46,6 +46,7 @@ defmodule AdventOfCode.Day09 do
     prevance_differences(tail, next_delta, [[next_delta | head] | acc])
   end
 
+  @spec differences([integer()]) :: [[integer()]]
   defp differences(line, acc \\ []) do
     if Enum.all?(line, &(&1 == 0)) do
       acc
@@ -57,6 +58,7 @@ defmodule AdventOfCode.Day09 do
     end
   end
 
+  @spec parse_input(String.t()) :: [[integer()]]
   defp parse_input(input) do
     input
     |> String.split("\n", trim: true)
