@@ -1,11 +1,17 @@
 defmodule AdventOfCode.Day12 do
+  use Memoize
+
   def part1(input) do
+    Application.ensure_all_started(:memoize)
+
     input
     |> parse_input()
     |> count_permutations()
   end
 
   def part2(input) do
+    Application.ensure_all_started(:memoize)
+
     input
     |> parse_input()
     |> unfold()
@@ -32,18 +38,18 @@ defmodule AdventOfCode.Day12 do
     count_permutations(symbols, runs, 0)
   end
 
-  defp count_permutations(symbols, [], _) do
+  def count_permutations(symbols, [], _) do
     if "#" in symbols, do: 0, else: 1
   end
 
-  defp count_permutations([], [current_run], seen) do
+  def count_permutations([], [current_run], seen) do
     if current_run == seen, do: 1, else: 0
   end
 
   # there are no symbols but runs remaining to be seen
-  defp count_permutations([], [_, _ | _], _), do: 0
+  def count_permutations([], [_, _ | _], _), do: 0
 
-  defp count_permutations([symbol | symbols], [current_run | _] = runs, seen) do
+  defmemo count_permutations([symbol | symbols], [current_run | _] = runs, seen) do
     case symbol do
       "?" ->
         cond do

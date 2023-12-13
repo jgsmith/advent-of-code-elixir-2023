@@ -10,6 +10,8 @@ import Config
 # import Config
 # config :advent_of_code, AdventOfCode.Input,
 #   session_cookie: "..."
+config :memoize,
+  cache_strategy: Memoize.CacheStrategy.Default
 
 try do
   import_config "secrets.exs"
