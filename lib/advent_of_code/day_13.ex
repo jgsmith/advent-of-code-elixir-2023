@@ -1,30 +1,33 @@
 defmodule AdventOfCode.Day13 do
-  def part1(input) do
-    {row_sum, col_sum} =
-      input
-      |> parse_input()
-      |> Enum.map(&find_reflection/1)
-      |> Enum.reduce({0, 0}, fn
-        {:row, row}, {row_sum, col_sum} -> {row_sum + row, col_sum}
-        {:col, col}, {row_sum, col_sum} -> {row_sum, col_sum + col}
-      end)
+  @type row :: [String.t()]
+  @type block :: [row]
+  @type reflection :: {:row, integer()} | {:col, integer()}
 
-    100 * row_sum + col_sum
+  def part1(input) do
+    input
+    |> parse_input()
+    |> Enum.map(&find_reflection/1)
+    |> score()
   end
 
   def part2(input) do
-    {row_sum, col_sum} =
-      input
-      |> parse_input()
-      |> Enum.map(&find_reflection(&1, 1))
-      |> Enum.reduce({0, 0}, fn
-        {:row, row}, {row_sum, col_sum} -> {row_sum + row, col_sum}
-        {:col, col}, {row_sum, col_sum} -> {row_sum, col_sum + col}
-      end)
-
-    100 * row_sum + col_sum
+    input
+    |> parse_input()
+    |> Enum.map(&find_reflection(&1, 1))
+    |> score()
   end
 
+  @spec score([reflection]) :: integer()
+  defp score(reflections) do
+    reflections
+    |> Enum.map(fn
+      {:row, row} -> 100 * row
+      {:col, col} -> col
+    end)
+    |> Enum.sum()
+  end
+
+  @spec find_reflection(block, integer()) :: reflection
   defp find_reflection(block, epsilon \\ 0) do
     case find_simple_reflection(block, epsilon) do
       nil ->
@@ -35,6 +38,7 @@ defmodule AdventOfCode.Day13 do
     end
   end
 
+  @spec distance(row, row) :: integer()
   defp distance(row1, row2) when is_list(row1) and is_list(row2) do
     row1
     |> Enum.zip(row2)
@@ -47,6 +51,7 @@ defmodule AdventOfCode.Day13 do
   defp distance(nil, row2) when is_list(row2), do: Enum.count(row2)
   defp distance(row1, nil) when is_list(row1), do: Enum.count(row1)
 
+  @spec find_simple_reflection(block, integer()) :: integer() | nil
   defp find_simple_reflection(block, 0) do
     block
     |> tl
@@ -110,12 +115,14 @@ defmodule AdventOfCode.Day13 do
     end
   end
 
+  @spec rotate_block(block) :: block
   defp rotate_block([[] | _]), do: []
 
   defp rotate_block(block) do
     [Enum.map(block, &hd/1) | rotate_block(Enum.map(block, &tl/1))]
   end
 
+  @spec parse_input(String.t()) :: [block]
   defp parse_input(input) do
     input
     |> String.trim()
